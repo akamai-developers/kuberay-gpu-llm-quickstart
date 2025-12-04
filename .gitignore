@@ -1,0 +1,5 @@
+# Note: api-keys.txt is the source of truth and should be committed
+# (but keep actual secrets out of git in production!)
+# 
+# Uncomment the line below if you want to keep api-keys.txt out of git:
+# api-keys.txt

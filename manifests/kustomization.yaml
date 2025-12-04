@@ -1,0 +1,23 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+  - rayservice.yaml
+  - gateway.yaml
+
+configMapGenerator:
+  - name: llm-app-code
+    files:
+      - llm_app.py
+
+secretGenerator:
+  - name: openai-api-keys
+    files:
+      - api-keys=api-keys.txt
+  - name: hf-token
+    envs:
+      - hf-secret.env
+
+# Ensure the ConfigMap and Secret names are updated in volume references
+configurations:
+  - kustomizeconfig.yaml

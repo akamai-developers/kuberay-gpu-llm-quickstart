@@ -1,0 +1,10 @@
+# openwebui-values.yaml
+ollama:
+  enabled: false
+openaiBaseApiUrls:
+  - "http://ray-serve-llm-serve-svc.default.svc.cluster.local:8000/v1"
+service:
+  type: ClusterIP
+  port: 8080
+openaiApiKeys:
+  - "dummy"
