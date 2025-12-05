@@ -29,3 +29,29 @@ spec:
     backendRefs:
     - name: ray-serve-llm-serve-svc
       port: 8000
+---
+# Authorization Policy to allow only valid API keys and health endpoints
+apiVersion: security.istio.io/v1
+kind: AuthorizationPolicy
+metadata:
+  name: llm-api-auth
+  namespace: default
+spec:
+  selector:
+    matchLabels:
+      gateway.networking.k8s.io/gateway-name: llm-gateway
+  action: ALLOW
+  rules:
+  # Allow requests with valid API key to /v1/*
+  - to:
+    - operation:
+        ports: ["80"]
+        paths: ["/v1/*"]
+    when:
+    - key: request.headers[authorization]
+      values: ["Bearer ${OPEN_API_KEY}"]
+  # Allow health check endpoints without authentication
+  - to:
+    - operation:
+        ports: ["80"]
+        paths: ["/health", "/healthz"]

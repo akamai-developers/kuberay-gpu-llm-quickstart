@@ -7,4 +7,4 @@ service:
   type: ClusterIP
   port: 8080
 openaiApiKeys:
-  - "dummy"
+  - "sk-test-key-xyz9876543210fed"

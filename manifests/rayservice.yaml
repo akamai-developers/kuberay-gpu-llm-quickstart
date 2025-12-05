@@ -1,4 +1,3 @@
-
 apiVersion: ray.io/v1
 kind: RayService
 metadata:
@@ -7,26 +6,19 @@ spec:
   serveConfigV2: |
     applications:
     - name: llms
-      import_path: llm_app:build_app
+      import_path: ray.serve.llm:build_openai_app
       route_prefix: "/"
       args:
         llm_configs:
         - model_loading_config:
-              model_id: gemma
-              model_source: google/gemma-2-27b-it
-          deployment_config:
-            autoscaling_config:
-              min_replicas: 1
-              max_replicas: 4
-              target_ongoing_requests: 64
-            max_ongoing_requests: 128
-        - model_loading_config:
-            model_id: qwen3-coder-30b-a3b-instruct
-            model_source: Qwen/Qwen3-Coder-30B-A3B-Instruct
+            model_id: qwen2.5-coder-32b-instruct
+            model_source: Qwen/Qwen2.5-Coder-32B-Instruct
           engine_kwargs:
             dtype: bfloat16
-            max_model_len: 10240
+            max_model_len: 64000
             gpu_memory_utilization: 0.75
+            enable_auto_tool_choice: true
+            tool_call_parser: hermes
           deployment_config:
             autoscaling_config:
               min_replicas: 1
@@ -60,27 +52,10 @@ spec:
             - containerPort: 10001
               name: client
               protocol: TCP
-            env:
-            - name: OPENAI_API_KEYS_FILE
-              value: "/etc/secrets/api-keys"
-            volumeMounts:
-            - name: api-keys
-              mountPath: /etc/secrets
-              readOnly: true
-            - name: app-code
-              mountPath: /home/ray/llm_app.py
-              subPath: llm_app.py
             resources:
               requests:
                 cpu: 2
                 memory: 4Gi
-          volumes:
-          - name: api-keys
-            secret:
-              secretName: openai-api-keys
-          - name: app-code
-            configMap:
-              name: llm-app-code
     workerGroupSpecs:
     - replicas: 1
       minReplicas: 1
@@ -88,7 +63,7 @@ spec:
       numOfHosts: 1
       groupName: gpu-group
       rayStartParams:
-        num-gpus: "4"
+        num-gpus: "2"
       template:
         spec:
           containers:
@@ -98,30 +73,14 @@ spec:
             - name: HUGGING_FACE_HUB_TOKEN
               valueFrom:
                 secretKeyRef:
-                  name: hf-token
+                  name: hf-secret
                   key: hf_token
-            - name: OPENAI_API_KEYS_FILE
-              value: "/etc/secrets/api-keys"
-            volumeMounts:
-            - name: api-keys
-              mountPath: /etc/secrets
-              readOnly: true
-            - name: app-code
-              mountPath: /home/ray/llm_app.py
-              subPath: llm_app.py
             resources:
               limits:
-                cpu: 32
+                cpu: 16
                 memory: 32Gi
-                nvidia.com/gpu: "4"
+                nvidia.com/gpu: "2"
               requests:
-                cpu: 32
+                cpu: 16
                 memory: 32Gi
-                nvidia.com/gpu: "4"
-          volumes:
-          - name: api-keys
-            secret:
-              secretName: openai-api-keys
-          - name: app-code
-            configMap:
-              name: llm-app-code
+                nvidia.com/gpu: "2"

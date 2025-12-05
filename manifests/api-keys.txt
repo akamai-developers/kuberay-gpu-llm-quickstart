@@ -1,7 +1,0 @@
-# API Keys - one per line
-# Lines starting with # are ignored
-# This is the source of truth for API keys
-
-sk-test-key-1234567890abcdef
-sk-test-key-abcdef1234567890
-sk-test-key-xyz9876543210fed
