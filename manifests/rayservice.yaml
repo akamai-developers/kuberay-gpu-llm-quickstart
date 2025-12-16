@@ -11,12 +11,15 @@ spec:
       args:
         llm_configs:
         - model_loading_config:
-            model_id: qwen2.5-coder-32b-instruct
-            model_source: Qwen/Qwen2.5-Coder-32B-Instruct
+            model_id: qwen3-coder-30b-a3b-instruct
+            model_source: Qwen/Qwen3-Coder-30B-A3B-Instruct
           engine_kwargs:
             dtype: bfloat16
-            max_model_len: 64000
-            gpu_memory_utilization: 0.75
+            max_model_len: 32678
+            gpu_memory_utilization: 0.85
+            tensor_parallel_size: 2  # Use both GPUs
+            disable_log_stats: false
+            enable_chunked_prefill: true
             enable_auto_tool_choice: true
             tool_call_parser: hermes
           deployment_config:
@@ -25,6 +28,8 @@ spec:
               max_replicas: 4
               target_ongoing_requests: 64
             max_ongoing_requests: 128
+            ray_actor_options:
+              num_gpus: 2  # Explicitly request 2 GPUs
   rayClusterConfig:
     rayVersion: "2.52.0"
     headGroupSpec:
@@ -77,10 +82,17 @@ spec:
                   key: hf_token
             resources:
               limits:
-                cpu: 16
-                memory: 32Gi
+                memory: 64Gi
                 nvidia.com/gpu: "2"
               requests:
                 cpu: 16
                 memory: 32Gi
                 nvidia.com/gpu: "2"
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: hf-secret
+type: Opaque
+stringData:
+  hf_token: "${HF_TOKEN}"

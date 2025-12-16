@@ -9,8 +9,8 @@
               "apiKey": "sk-test-key-xyz9876543210fed"
           },
           "models": {
-            "qwen2.5-coder-32b-instruct": {
-                "name": "Qwen2.5 Coder",
+            "qwen3-coder-30b-a3b-instruct": {
+                "name": "Qwen3 Coder",
             }
           }
       }
