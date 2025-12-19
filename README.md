@@ -6,28 +6,29 @@ AI coding agents are all the rage, but they come with two significant drawbacks.
 
 # Technology Stack
 
-* AI/ML: KubeRay to schedule and deploy LLMs  
-* Deployment: Linode Kubernetes Engine with Blackwell GPU NodePools  
-* Infrastructure: Linode-Cli for Linode resource provisioning
+* AI/ML: [KubeRay](https://github.com/ray-project/kuberay) to schedule, deploy, and serve LLMs  
+* Deployment: Linode Kubernetes Engine with GPU NodePools (NVIDIA Blackwell or Ada) 
+* Infrastructure: Akamai Cloud for resource provisioning
 
 # Prerequisites
 
-1. A Hugging face account - This is used to download LLM weights  
-2. A Linode account with access to blackwell GPUs - raise [support ticket](https://cloud.linode.com/support/tickets?dialogOpen=true) if you can’t see them
-    (**Note** This can be used with [RTX 4000 Ada GPUs](https://techdocs.akamai.com/cloud-computing/docs/gpu-compute-instances) as well)
-3. Opencode installed on your device  
-4. Helm and kubectl installed on your device  
-5. Linode CLI installed on your device
+1. A [HuggingFace](https://huggingface.co/) account, to download LLM weights.
+2. An Akamai Cloud (formerly Linode) account with access to GPUs. 
+For NVIDIA RTX 4000 Ada GPUs, see [here](https://techdocs.akamai.com/cloud-computing/docs/gpu-compute-instances).
+For NVIDIA Blackwell, request access [here](https://cloud.linode.com/support/tickets?dialogOpen=true). 
+3. [Opencode](https://opencode.ai/) installed on your device. 
+4. Helm and kubectl installed on your device.
+5. [Linode CLI](https://github.com/linode/linode-cli) installed on your device.
 
-ALL code samples are available at [https://github.com/akamai-developers/codingassistant-sample/tree/main](https://github.com/akamai-developers/codingassistant-sample/tree/main) 
+ALL code samples are available at [https://github.com/akamai-developers/kuberay-gpu-llm-quickstart](https://github.com/akamai-developers/kuberay-gpu-llm-quickstart) 
 
 # Deployment Steps
 
 ## 1. Clone this repository
 
 ```sh
-git clone <repository-url> codingassistant
-cd codingassistant
+git clone <repository-url> kuberay-gpu-llm-quickstart
+cd kuberay-gpu-llm-quickstart
 ```
 
 ## 2. Create a Linode API key
@@ -35,7 +36,7 @@ cd codingassistant
 In the Akamai Cloud Console, create a Linode API key with read/write permissions for Kubernetes, and NodeBalancers, and read permissions for events.  
 ![Linode PAT Creation](screencasts/01-LinodePAT.gif)
 
-## 3. Create a LKE Cluster with a blackwell GPU 
+## 3. Create a LKE Cluster with an NVIDIA Blackwell GPU 
 
 Create a LKE Cluster with two node pools \- one with a blackwell-gpu, and one with a standard linode type, to run our other workloads on
 
@@ -58,7 +59,7 @@ export CLUSTER_ID=<id from the previous command>
 
 ![LKE Cluster Creation](screencasts/02-cluster-create.gif)
 
-## 4. Fetch Kubeconfig, install Nvidia Operator 
+## 4. Fetch Kubeconfig, install NVIDIA Operator 
 
 Wait for the cluster’s kubeconfig to be ready, and save it.
 
@@ -122,7 +123,7 @@ helm install --wait istiod istio/istiod -n istio-system
 
 ## 7. Create a HuggingFace APIToken
 
-HuggingFace allows you to download models from multiple providers \- it is similar to dockerHub, but for MachineLearning Models. Create an API key to download models
+HuggingFace allows you to download models from multiple providers \- it is similar to dockerHub, but for Machine Learning Models. Create an API key to download models
 
 ![HuggingFace Token creation](screencasts/06-hf-token-create.gif)
 
