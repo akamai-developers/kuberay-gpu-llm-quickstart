@@ -1,14 +1,26 @@
 # Deploy an Open Source LLM on Kubernetes with KubeRay 
 
 # Overview
+This project shows how to run an open-source Large Language Model (LLM), specifically the Qwen3-Coder-30B-A3B-Instruct, on enterprise-grade infrastructure. In this case, we will use it for a coding assistant scenario.
+This setup provides a complete end-to-end pipeline: from provisioning GPU-backed Kubernetes clusters to serving the model via a secure API and connecting it to real-world developer tools like OpenCode and OpenWebUI.
 
-AI coding agents are all the rage, but they come with two significant drawbacks. Unpredictable costs, and an uncertainty about Intellectual Property protection and data privacy. Akamai Inference Cloud lets you tackle both of these problems in one shot. The powerful blackwell GPUs of Akamai Cloud let you run Large Language Models on Akamai Infrastructure. This gives you predictable costs \- you only pay for the hardware you use\! Since you control the entire deployment, you have the flexibility to modify/deploy whatever LLM you want, and can rest assured that your IP is not used for training purposes. 
+# Core Components
+* Model: The [Qwen3-Coder-30B-A3B-Instruct](https://huggingface.co/Qwen/Qwen3-Coder-30B-A3B-Instruct), a model optimized for coding tasks that balances high capabilities with lightweight resource requirements.
+* Orchestration ([KubeRay](https://github.com/ray-project/kuberay)): A Kubernetes operator that manages Ray Clusters and Ray Services, providing the framework needed to schedule, deploy, and serve LLMs at scale.
+* Infrastructure ([Akamai Cloud](https://www.linode.com/lp/free-credit-100-5000/?promo=sitelin100-02162023&promo_value=100&promo_length=60&utm_source=google&utm_medium=cpc&utm_campaign=f-mc-65659&utm_id=cloud&utm_content=US-EN_NB_CL_PLG_VPS&utm_placement=NORAM&gad_source=1&gad_campaignid=1706209438&gbraid=0AAAAAD_kTnU8v3h7Z9I9UhxMOpiO_mFIU&gclid=Cj0KCQiAjJTKBhCjARIsAIMC449C-p-2UCh4rRKd7tkhv4gmY-NyWx70gTmEwtlrZO4Z0HlFWgWCd3IaAo9CEALw_wcB)): High-performance NVIDIA Blackwell or Ada GPU nodes on Linode Kubernetes Engine (LKE).
+* Networking (Istio & Gateway API): Modern ingress management using Istio and the Kubernetes Gateway API to route and secure traffic to the LLM service.
+* Clients: Integration with OpenCode for AI-powered IDE features and OpenWebUI for a familiar, browser-based chat interface.
 
-# Technology Stack
+# The "Why": Scalable, Private AI
 
-* AI/ML: [KubeRay](https://github.com/ray-project/kuberay) to schedule, deploy, and serve LLMs  
-* Deployment: Linode Kubernetes Engine with GPU NodePools (NVIDIA Blackwell or Ada) 
-* Infrastructure: Akamai Cloud for resource provisioning
+## Why Ray and KubeRay?
+Ray is an open-source unified compute framework that simplifies the process of scaling Python and AI workloads. Running LLMs often requires distributed computing across multiple GPUs; Ray handles this complexity (such as tensor parallelism) natively.
+
+KubeRay brings this power to Kubernetes. By using the KubeRay operator, you can manage your AI infrastructure as code, allowing for:
+
+* Simplified Deployment: Using custom resources like RayService to define the model's environment and scaling logic in a single YAML file.
+* Elastic Scaling: Automatically adjusting the number of worker replicas based on request traffic to optimize resource usage.
+* Resiliency: Leveraging Kubernetes' self-healing capabilities to ensure your LLM endpoints remain highly available.
 
 # Prerequisites
 
@@ -253,3 +265,10 @@ helm install open-webui open-webui/open-webui \
 Chat away!
 
 ![Using OpenWebUI](screencasts/12-openwebui-usage.gif)
+
+## Why Akamai Cloud GPUs?
+Traditional AI API providers often come with unpredictable costs and data privacy concerns. Deploying on Akamai Cloud (formerly Linode) solves both:
+* Performance: Akamai's Blackwell and Ada GPUs provide the high-memory bandwidth and throughput necessary to run complex 30B+ parameter models locally.
+* Predictable Economics: You pay only for the hardware you use, eliminating the "token-based" pricing models of black-box AI services.
+* Intellectual Property Protection: Because you control the entire stack, you can rest assured that your proprietary code and data are never used for training third-party models.
+
