@@ -1,4 +1,4 @@
-# Deploy your own Coding Assistant on LKE using KubeRay
+# Deploy an Open Source LLM on Kubernetes with KubeRay 
 
 # Overview
 
