@@ -69,6 +69,8 @@ linode-cli lke cluster-create \
 export CLUSTER_ID=<id from the previous command>
 ```
 
+If you are using Ada GPUs, replace `3-gpu-rtxpro6000-blackwell-2` with `g2-gpu-rtx4000a4-m` in the command above.
+
 ![LKE Cluster Creation](screencasts/02-cluster-create.gif)
 
 ## 4. Fetch Kubeconfig, install NVIDIA Operator 
