@@ -11,12 +11,12 @@ spec:
       args:
         llm_configs:
         - model_loading_config:
-            model_id: qwen3-coder-30b-a3b-instruct
-            model_source: Qwen/Qwen3-Coder-30B-A3B-Instruct
+            model_id: qwen2.5-coder-14b-instruct
+            model_source: Qwen/Qwen2.5-Coder-14B-Instruct
           engine_kwargs:
             dtype: bfloat16
-            max_model_len: 32678
-            gpu_memory_utilization: 0.85
+            max_model_len: 16384
+            gpu_memory_utilization: 0.90
             tensor_parallel_size: 2  # Use both GPUs
             disable_log_stats: false
             enable_chunked_prefill: true
@@ -28,8 +28,6 @@ spec:
               max_replicas: 4
               target_ongoing_requests: 64
             max_ongoing_requests: 128
-            ray_actor_options:
-              num_gpus: 2  # Explicitly request 2 GPUs
   rayClusterConfig:
     rayVersion: "2.52.0"
     headGroupSpec:
@@ -85,8 +83,8 @@ spec:
                 memory: 64Gi
                 nvidia.com/gpu: "2"
               requests:
-                cpu: 16
-                memory: 32Gi
+                cpu: 4
+                memory: 16Gi
                 nvidia.com/gpu: "2"
 ---
 apiVersion: v1
