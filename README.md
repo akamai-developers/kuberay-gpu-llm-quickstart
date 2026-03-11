@@ -25,12 +25,12 @@ KubeRay brings this power to Kubernetes. By using the KubeRay operator, you can 
 # Prerequisites
 
 1. A [HuggingFace](https://huggingface.co/) account, to download LLM weights.
-2. An Akamai Cloud (formerly Linode) account with access to GPUs. Create an [account here](http://login.linode.com/signup?promo=akm-dev-git-300-31126-M055) (we have a $300 credit just for you) 
-For NVIDIA RTX 4000 Ada GPUs, see [here](https://techdocs.akamai.com/cloud-computing/docs/gpu-compute-instances).
+2. An Akamai Cloud (formerly Linode) account with access to GPUs. Create an [account here](http://login.linode.com/signup?promo=akm-dev-git-300-31126-M055) (we have a $300 credit just for you).
+3. For NVIDIA RTX 4000 Ada GPUs, see [here](https://techdocs.akamai.com/cloud-computing/docs/gpu-compute-instances).
 For NVIDIA Blackwell, request access [here](https://cloud.linode.com/support/tickets?dialogOpen=true). 
-3. [Opencode](https://opencode.ai/) installed on your device. 
-4. Helm and kubectl installed on your device.
-5. [Linode CLI](https://github.com/linode/linode-cli) installed on your device.
+4. [Opencode](https://opencode.ai/) installed on your device. 
+5. Helm and kubectl installed on your device.
+6. [Linode CLI](https://github.com/linode/linode-cli) installed on your device.
 
 ALL code samples are available at [https://github.com/akamai-developers/kuberay-gpu-llm-quickstart](https://github.com/akamai-developers/kuberay-gpu-llm-quickstart) 
 
